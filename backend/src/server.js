@@ -6,6 +6,7 @@ import path from "path";
 import { clerkMiddleware } from "@clerk/express";
 import { connectDB } from "./lib/db.js";
 import User from "./models/user.model.js";
+import job from "./lib/cron.js";
 const app = express();
 const PORT = process.env.PORT;
 const FRONTEND_URL = process.env.FRONTEND_URL;

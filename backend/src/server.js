@@ -20,11 +20,11 @@ app.use(
   express.raw({ type: "application/json" }),
   clerkWebhook,
 );
-app.use("/api/auth", authRoutes);
-app.use("/api/messages", messageRoutes);
 app.use(express.json());
 app.use(cors({ origin: FRONTEND_URL, credentials: true }));
 app.use(clerkMiddleware());
+app.use("/api/auth", authRoutes);
+app.use("/api/messages", messageRoutes);
 
 app.get("/health", (req, res) => {
   res.status(200).json({ ok: true });

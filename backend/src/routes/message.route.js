@@ -4,6 +4,8 @@ import {
   getMessages,
   getUsersForSidebar,
   sendMessage,
+  searchUsers,
+  getUserProfile,
 } from "../controllers/message.controller.js";
 import { protectRoute } from "../middleware/auth.middleware.js";
 import { upload } from "../middleware/upload.middleware.js";
@@ -14,6 +16,8 @@ router.use(protectRoute);
 
 router.get("/users", getUsersForSidebar);
 router.get("/conversations", getConversationsForSidebar);
+router.get("/search", searchUsers);
+router.get("/:id/profile", getUserProfile);
 router.get("/:id", getMessages);
 router.post("/send/:id", upload.single("media"), sendMessage);
 

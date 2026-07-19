@@ -129,3 +129,44 @@ export async function sendMessage(req, res) {
     res.status(500).json({ message: "Internal server error" });
   }
 }
+
+export async function searchUsers(req, res) {
+  try {
+    const { q } = req.query;
+    const loggedInUserId = req.user._id;
+
+    if (!q || q.trim().length === 0) {
+      return res.status(400).json({ message: "Search query is required" });
+    }
+
+    const searchResults = await User.find({
+      _id: { $ne: loggedInUserId },
+      $or: [
+        { fullName: { $regex: q, $options: "i" } },
+        { email: { $regex: q, $options: "i" } },
+      ],
+    }).select("-clerkId").limit(20);
+
+    res.status(200).json(searchResults);
+  } catch (error) {
+    console.error("Error in searchUsers:", error.message);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+export async function getUserProfile(req, res) {
+  try {
+    const { id: userId } = req.params;
+
+    const user = await User.findById(userId).select("-clerkId");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error("Error in getUserProfile:", error.message);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
